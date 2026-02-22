@@ -17,8 +17,9 @@ Planpal(이하 "앱")은 다음의 목적을 위하여 개인정보를 처리합
 
 1. **일정 및 할 일 관리 서비스 제공** - 사용자가 입력한 일정, 할 일, 메모 등의 데이터를 저장하고 관리합니다.
 2. **AI 기반 일정 분석 기능 제공** - 사용자가 입력한 텍스트 또는 선택한 이미지를 분석하여 일정과 할 일을 자동으로 추출합니다. AI 기능은 사용자가 직접 발급한 Google Gemini API 키를 사용하며, 개발자는 해당 키에 접근할 수 없습니다.
-3. **기기 간 데이터 동기화** - 사용자의 iCloud 계정을 통해 여러 기기 간 데이터를 동기화합니다.
+3. **기기 간 데이터 동기화** - 사용자의 iCloud 계정을 통해 여러 기기 간 데이터를 동기화하며, Apple Watch 연동 시 iPhone과 Watch 간 데이터를 WatchConnectivity를 통해 전달합니다.
 4. **외부 캘린더 및 미리 알림 연동** - Apple 캘린더 및 미리 알림 앱과의 데이터 연동 기능을 제공합니다.
+5. **알림 서비스 제공** - 사용자가 설정한 일정 및 할 일의 알림을 기기 로컬 알림으로 전달합니다.
 
 ---
 
@@ -38,6 +39,8 @@ Planpal(이하 "앱")은 다음의 목적을 위하여 개인정보를 처리합
 | 사진/이미지 | 사용자가 AI 분석을 위해 선택한 이미지 | AI 기반 일정 추출 | 분석 후 즉시 삭제 |
 | Apple 캘린더 데이터 | 연동 시 캘린더 일정 정보 | 외부 캘린더 연동 | 기기 내 저장 |
 | Apple 미리 알림 데이터 | 연동 시 미리 알림 정보 | 미리 알림 동기화 | 기기 내 저장 |
+| 알림 정보 | 일정·할 일의 제목 및 알림 시간 | 로컬 알림 전송 | 기기 알림 시스템 (외부 미전송) |
+| Apple Watch 전달 데이터 | 변경 유형, 항목 ID, 타임스탬프 | iPhone↔Watch 데이터 전달 | 기기 간 WatchConnectivity (앱 서버 미전송) |
 
 ### 자동 수집 항목
 - 앱은 사용자 행동 분석, 광고, 추적 목적의 데이터를 수집하지 않습니다.
@@ -47,7 +50,7 @@ Planpal(이하 "앱")은 다음의 목적을 위하여 개인정보를 처리합
 
 ## 제3조 (개인정보의 처리 및 보유 기간)
 
-1. **기기 내 저장 데이터** - 보유 기간: 사용자가 앱을 삭제하거나 데이터를 직접 삭제할 때까지
+1. **기기 내 저장 데이터** - 보유 기간: 사용자가 데이터를 삭제하거나 앱을 삭제할 때까지. 앱 내에서 삭제한 데이터는 즉시 제거되지 않고 휴지통으로 이동되며, 사용자가 휴지통을 비울 때 영구 삭제됩니다.
 2. **iCloud 동기화 데이터** - 보유 기간: 사용자가 iCloud에서 데이터를 삭제하거나 iCloud 동기화를 해제할 때까지
 3. **AI 분석용 전송 데이터** - 사용자가 입력한 텍스트 및 이미지는 분석 목적으로 Google Gemini API에 전송됩니다. 전송 시 사용자 본인이 발급한 API 키가 사용되며, 전송된 데이터는 앱에 저장되지 않습니다. Google의 데이터 보존 정책에 따라 처리됩니다.
 4. **Gemini API 키** - 사용자 기기의 키체인(Keychain)에 저장되며, iCloud 백업에 포함되지 않습니다(`kSecAttrAccessibleWhenUnlockedThisDeviceOnly`). 앱 삭제 또는 사용자가 직접 삭제 시 즉시 파기됩니다.
@@ -61,7 +64,7 @@ Planpal(이하 "앱")은 다음의 목적을 위하여 개인정보를 처리합
 | 제공받는 자 | 제공 목적 | 제공 항목 | 보유 기간 |
 |------------|----------|----------|----------|
 | Google LLC (Gemini AI) | AI 기반 텍스트/이미지 분석 | 사용자가 입력한 텍스트, 선택한 이미지 | Google 정책에 따름 |
-| Apple Inc. (iCloud) | 기기 간 데이터 동기화 | 일정, 할 일, 태그 데이터 | 사용자 삭제 시까지 |
+| Apple Inc. (iCloud) | 기기 간 데이터 동기화 | 일정, 할 일, 태그, 외부 캘린더 이벤트 완료 상태 데이터 | 사용자 삭제 시까지 |
 
 ※ Google Gemini AI 전송은 **사용자 본인이 발급한 API 키**를 통해 이루어집니다. 개발자는 사용자의 API 키 또는 전송 데이터에 접근할 수 없습니다.
 
@@ -172,6 +175,8 @@ Kim Dohyun ("Developer") operates the Planpal application ("App"). This Privacy 
 | Photos/Images | AI-based schedule extraction | Sent to Gemini API, not stored in app |
 | Apple Calendar data | Calendar sync | Stored on device |
 | Apple Reminders data | Reminder sync | Stored on device |
+| Notification data | Event/task title and scheduled time | Local notifications only — never sent externally |
+| Apple Watch data | Change type, item ID, timestamp | Transferred between iPhone and Watch via WatchConnectivity — never sent to app servers |
 
 ### Data We Do NOT Collect
 - Personal identifiers (name, email, phone number)
@@ -182,15 +187,16 @@ Kim Dohyun ("Developer") operates the Planpal application ("App"). This Privacy 
 
 - To provide schedule and task management services
 - To analyze text and images for automatic event extraction (AI feature, using **your own** Gemini API key)
-- To sync data across your devices via iCloud
+- To sync data across your devices via iCloud and between iPhone and Apple Watch (WatchConnectivity)
 - To integrate with Apple Calendar and Reminders
+- To deliver local notifications for scheduled events and tasks
 
 ## 4. Third-Party Services
 
 | Service | Purpose | Data Shared |
 |---------|---------|-------------|
 | Google Gemini AI | Text/image analysis | Text input, selected images |
-| Apple iCloud | Data synchronization | Events, tasks, tags |
+| Apple iCloud | Data synchronization | Events, tasks, tags, external calendar event completion status |
 
 > **Important:** AI analysis uses **your own Google Gemini API key**, which is stored only in your device's Keychain. The Developer cannot access your API key or the data sent to Google.
 
@@ -206,6 +212,7 @@ Kim Dohyun ("Developer") operates the Planpal application ("App"). This Privacy 
 
 You can:
 - View, edit, or delete your data within the app
+- Items deleted in-app are moved to Trash first; permanently deleted when you empty Trash
 - Delete your Gemini API key via Settings > AI Settings
 - Delete all data by uninstalling the app
 - Manage iCloud data through iOS Settings > Apple ID > iCloud
